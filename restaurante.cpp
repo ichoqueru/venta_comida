@@ -20,6 +20,16 @@ struct delivery{
 	int telefono,dni;
 }delivery[200];
 
+const int MAX_ITEMS = 30;
+string bebidas[MAX_ITEMS] = {"Agua mineral", "Gaseosa", "Jugo"};
+float preciosBebidas[MAX_ITEMS] = {2.50, 3.00, 4.00};
+
+string platos[MAX_ITEMS] = {"Arroz con pollo", "Lomo saltado", "Tallarines rojos"};
+float preciosPlatos[MAX_ITEMS] = {12.50, 15.00, 11.00};
+
+string postres[MAX_ITEMS] = {"Gelatina", "Flan", "Helado"};
+float preciosPostres[MAX_ITEMS] = {2.00, 3.50, 4.50};
+
 int main(){
     int op,cant,comida,pedido,cantdeli;
     string bebidas,platos,postres;
@@ -28,13 +38,18 @@ int main(){
     string direct,nomd;
     int mesa;
     int telefono,dni;
-    
+    int tipoPedido = 0, nroPedido = 1;
+    cliente c;
+    menu m;
+    time_t t = time(0);
+    tm* now = localtime(&t);
 
     do{
         system("cls");  
         cout<<"---------------"<<endl<<"MENU DE OPCIONES"<<endl<<"---------------"<<endl;
         cout<<"1. Encargado"<<endl;
         cout<<"2. Cliente"<<endl;
+        cout<<"3. Imprimir factura"<<endl;
         cout<<"Eliga un usuario: "; cin>>op;
         switch(op){
             case 1:
@@ -48,36 +63,86 @@ int main(){
             
             switch(comida){
                 case 1:   //bebidas
-                system("cls");
+                do
+                {
+                 while (condition);
+                ("cls");
                 cout<<"---BEBIDAS---"<<endl;
-                cout<<"Ingrese la cantidad de bebidas: "; cin>>cantB;
-                cin.ignore();
-                for(int i=0;i<cantB;i++){
-                    cout<<"Bebida "<<i+1<<": "; getline(cin,bebidas);
+                for (int i = 0; i < totalBebidas; i++) {
+                cout << i + 1 << ") " << bebidas[i] << " - S/ " << fixed << setprecision(2) << preciosBebidas[i] << endl;
                 }
+                cout << "Seleccione una bebida (1-" << totalBebidas << "): ";
+                cin >> seleccion;
+
+                if (seleccion < 1 || seleccion > totalBebidas) {
+                cout << "Opción inválida.\n";
+                continue;
+                }
+                cout << "Cantidad: ";
+                cin >> cantidad;
+
+                m.bebidas += to_string(cantidad) + "x " + bebidas[seleccion - 1] + "\n";
+                c.monto += preciosBebidas[seleccion - 1] * cantidad;
+
+                cout << "\nDesea agregar otra bebida? (1=Si, 0=No): ";
+                cin >> seleccion;
+
+                } while (seleccion == 1);
                 break;
 
                 case 2:    //plato de fondo
-                system("cls");
+                do {
+                    system("cls");
                 cout<<"---PLATO DE FONDO---"<<endl;
-                cout<<"Ingrese la cantidad de platillos: "; cin>>cantC;
-                cin.ignore();
-                for(int i=0;i<cantC;i++){
-                    cout<<"Platillo "<<i+1<<": "; getline(cin,platos);
-                }                
-                break;
+                    for (int i = 0; i < totalPlatos; i++) {
+                    cout << i + 1 << ") " << platos[i] << " - S/ " << fixed << setprecision(2) << preciosPlatos[i] << endl;
+                    }
+                    cout << "Seleccione un plato (1-" << totalPlatos << "): ";
+                    cin >> seleccion;
+
+                    if (seleccion < 1 || seleccion > totalPlatos) {
+                    cout << "Opción inválida.\n";
+                    continue;
+                    }
+
+                    cout << "Cantidad: ";
+                    cin >> cantidad;
+
+                    m.platos += to_string(cantidad) + "x " + platos[seleccion - 1] + "\n";
+                    c.monto += preciosPlatos[seleccion - 1] * cantidad;
+
+                    cout << "\nDesea agregar otro plato? (1=Si, 0=No): ";
+                    cin >> seleccion;
+
+                    }while (seleccion == 1);
+                    break;
 
                 case 3:  //postres
                 system("cls");
                 cout<<"---POSTRES---"<<endl;
-                cout<<"Ingrese la cantidad de postres: "; cin>>cantP;
-                cin.ignore();
-                for(int i=0;i<cantP;i++){
-                    cout<<"Postre "<<i<<": "; getline(cin,postres);
+                for (int i = 0; i < totalPostres; i++) {
+                cout << i + 1 << ") " << postres[i] << " - S/ " << fixed << setprecision(2) << preciosPostres[i] << endl;
                 }
-                break;
+                cout << "Seleccione un postre (1-" << totalPostres << "): ";
+                cin >> seleccion;
 
-            }                        
+                if (seleccion < 1 || seleccion > totalPostres) {
+                cout << "Opción inválida.\n";
+                continue;
+                }
+
+                cout << "Cantidad: ";
+                cin >> cantidad;
+
+                m.postres += to_string(cantidad) + "x " + postres[seleccion - 1] + "\n";
+                c.monto += preciosPostres[seleccion - 1] * cantidad;
+
+                cout << "\nDesea agregar otro postre? (1=Si, 0=No): ";
+                cin >> seleccion;
+
+            } while (seleccion == 1);
+            break;
+        }                       
             system("pause");
             break;
 
@@ -117,12 +182,30 @@ int main(){
                     cout<<"\n";
                 }                
                 break;
+
+                case 3:
+                system("cls");
+                cout << "------- FACTURA -------" << endl;
+                cout << "Fecha: " << (now->tm_mday) << "/" << (now->tm_mon + 1) << "/" << (now->tm_year + 1900) << endl;
+                cout << "Numero de pedido: " << nroPedido++ << endl;
+                cout << "Cliente: " << c.nom << endl;
+                if (tipoPedido == 1) {
+                    cout << "Direccion: " << c.direc << endl;
+                    cout << "DNI: " << c.dni << endl;
+                    cout << "Telefono: " << c.telefono << endl;
+                } else if (tipoPedido == 2) {
+                    cout << "Mesa Nro: " << c.mesa << endl;
+                }
+                cout << "\nBebidas:\n" << m.bebidas;
+                cout << "Platos:\n" << m.platos;
+                cout << "Postres:\n" << m.postres;
+                cout << "\nTOTAL: S/." << fixed << setprecision(2) << c.monto << endl;
+                system("pause");
+                break;
             
         	}
         	system("pause");
-        	break;
-        }    
-       
+        	break;    
 
     }while(op!=0);
 
