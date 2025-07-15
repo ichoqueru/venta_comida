@@ -3,11 +3,19 @@
 #include<stdlib.h>
 using namespace std;
 
+struct pedido{
+	string tipo;
+	string nombre;
+	float precio;
+	int cantidad;
+};
 
 struct cliente{
     string nom;
     int mesa;    
     float monto;
+    int cantPedidos;
+    struct pedido pedidos[20];
 }mesas[200];
 
 struct menu{
@@ -31,8 +39,10 @@ struct factura{
 	struct cliente mesas[200];
 };
 
+
 void imprimeMenu(menu &);
 void imprimeFactura(factura &);
+void realizarPedido(menu &,cliente &);
 
 int main(){
     int op,comida,pedido,eleccion;
@@ -50,6 +60,11 @@ int main(){
     menu m;
     int d,s,a,opc,cant,cantdeli;
     factura f;
+    cliente c;
+    string tipo;
+	string nombre;
+	float precio;
+	int cantidad;
 
     do{
         system("cls");  
@@ -128,9 +143,7 @@ int main(){
             
             switch(pedido){
                 case 1:  //delivery
-                system("cls");
-                imprimeMenu(m);    //muestra el menu al cliente
-                cout<<"\n-----------------------------------------------------------------"<<endl;
+                system("cls");               
                 cout<<"\n"<<"---DELIVERY---"<<endl;
                 cout<<"Cantidad de clientes: "; cin>>f.cantdeli;
                 cout<<"\n";
@@ -144,13 +157,13 @@ int main(){
                 cout<<"Ingrese el DNI: "; cin>>f.entregas[i].dni;
                 cout<<"Ingrese el telefono: "; cin>>f.entregas[i].telefono;
                 cout<<"\n";
+                
+                realizarPedido(m,f.mesas[i]); //realizar el pedido
                 }
                 break;
 
                 case 2:    //para la mesa
                 system("cls");
-                imprimeMenu(m);    //muestra el menu al cliente
-                cout<<"\n-----------------------------------------------------------------"<<endl;
                 cout<<"\n"<<"---PARA LA MESA---"<<endl;
                 cout<<"Cantidad de clientes: "; cin>>f.cant;
                 cout<<"\n";
@@ -160,8 +173,10 @@ int main(){
                     cout<<"Datos del cliente "<<i+1<<"---"<<endl;
                     cin.ignore();                    
                     cout<<"Nombre del cliente: "; getline(cin,f.mesas[i].nom);
-                    cout<<"Numero de mesa: "; cin>>f.mesas[i].mesa;
+                    cout<<"Numero de Mesa: "; cin>>f.mesas[i].mesa;
                     cout<<"\n";
+                    
+                    realizarPedido(m,f.mesas[i]);   //realizar el pedido
                 }   
                 break;
             
@@ -174,14 +189,14 @@ int main(){
         		cout<<"\n---Desea imprimir la boleta?---"<<endl;
 				cout<<"1. si"<<endl;
 				cout<<"2. no"<<endl;
-				cout<<"Eliga una opccion: "; cin>>eleccion;
+				cout<<"Eliga una opcion: "; cin>>eleccion;
 				switch(eleccion){
 					case 1:
 						system("cls");
 						cout<<"----------------"<<endl<<"BOLETA"<<endl<<"----------------"<<endl;
 						cout<<"1. Para la mesa"<<endl;
 						cout<<"2. Delivery"<<endl;
-						cout<<"Eliga el tipo de factura: "; cin>>f.opc;
+						cout<<"Eliga el tipo de boleta: "; cin>>f.opc;
 						cout<<"\n";
 						imprimeFactura(f);
 						system("pause");
@@ -189,6 +204,7 @@ int main(){
 					
 					case 2:
 						break;
+						
 					default:
 						cout<<"Opcion no valida"<<endl;
 						system("pause");
@@ -234,12 +250,15 @@ void imprimeMenu(menu &m){
 }
 
 void imprimeFactura(factura &f){
+	system("cls");
+	cout<<"----------------"<<endl<<"BOLETA"<<endl<<"----------------"<<endl;
+	cout<<"\n";
 	
 	if(f.opc==1){
 		cout<<"FECHA: "<<f.d<<"/"<<f.s<<"/"<<f.a<<endl;
 	       for(int i=0;i<f.cant;i++){           	           
               cout<<"Nombre del cliente: "<<f.mesas[i].nom<<endl;
-              cout<<"Numero de mesa: "<<f.mesas[i].mesa<<endl;
+              cout<<"Mesa: "<<f.mesas[i].mesa<<endl;
               cout<<"\n";        
            }		
 	}
@@ -255,4 +274,79 @@ void imprimeFactura(factura &f){
 	        } 
          }
     }
+}
+
+void realizarPedido(menu &m, cliente &c){
+	int opn,cantidad,item;
+	do{
+		system("cls");
+		imprimeMenu(m);  //muetsra el menu al cliente
+		cout<<"\n-----------------------------------------------------------------"<<endl;
+		cout<<"1. Agregar bebida"<<endl;
+		cout<<"2. Agregar plato"<<endl;
+		cout<<"3. Agregar postre"<<endl;
+		cout<<"4. Finalizar pedido"<<endl;
+		cout<<"Seleccione opcion: "; cin>>opn;
+		
+		switch(opn){
+			case 1: //bebidas
+			    if(m.cantB>0){
+				     cout<<"Seleccione bebida (1-"<<m.cantB<<"): ";
+				     cin>>item;
+				     cout<<"Cantidad: ";
+				     cin>>cantidad;
+				
+				    c.pedidos[c.cantPedidos].tipo="bebida";
+				    c.pedidos[c.cantPedidos].nombre=m.bebidas[item-1];
+				    c.pedidos[c.cantPedidos].precio=m.preciosBebidas[item-1];
+				    c.pedidos[c.cantPedidos].cantidad=cantidad;
+				    c.cantPedidos++;
+			    }
+			system("pause");
+			break;
+			
+			case 2:    //platos
+				if(m.cantC>0){
+				     cout<<"Seleccione platillo (1-"<<m.cantC<<"): ";
+				     cin>>item;
+				     cout<<"Cantidad: ";
+				     cin>>cantidad;
+				
+				    c.pedidos[c.cantPedidos].tipo="plato";
+				    c.pedidos[c.cantPedidos].nombre=m.platos[item-1];
+				    c.pedidos[c.cantPedidos].precio=m.preciosPlatos[item-1];
+				    c.pedidos[c.cantPedidos].cantidad=cantidad;				    
+				    c.cantPedidos++;
+			    }
+				system("pause");
+				break;
+				
+			case 3:    //postres
+				if(m.cantP>0){
+				     cout<<"Seleccione postre (1-"<<m.cantP<<"): ";
+				     cin>>item;
+				     cout<<"Cantidad: ";
+				     cin>>cantidad;
+				
+				    c.pedidos[c.cantPedidos].tipo="postre";
+				    c.pedidos[c.cantPedidos].nombre=m.postres[item-1];
+				    c.pedidos[c.cantPedidos].precio=m.preciosPostres[item-1];
+				    c.pedidos[c.cantPedidos].cantidad=cantidad;
+				    c.cantPedidos++;
+			    }
+				system("pause");
+				break;
+					
+			case 4: //calcular el total
+				for(int i=0;i<c.cantPedidos;i++){
+			            c.monto+=c.pedidos[i].precio*c.pedidos[i].cantidad;
+		        }
+		    break;
+		            
+		    default:
+		       	cout<<"Opcion no valida"<<endl;
+				break;
+		}
+		
+	}while(opn!=4);
 }
