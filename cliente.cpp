@@ -22,7 +22,7 @@ void realizarPedido(menu &m, cliente &c){
 			    if(m.cantB>0){
 				     cout<<"Seleccione bebida (1-"<<m.cantB<<"): ";
 				     cin>>item;
-				     cout<<"Cantidad: ";
+				     cout<<"Cantidad a pedir: ";
 				     cin>>cantidad;
 				
 				    c.pedidos[c.cantPedidos].tipo="bebida";
@@ -38,7 +38,7 @@ void realizarPedido(menu &m, cliente &c){
 				if(m.cantC>0){
 				     cout<<"Seleccione platillo (1-"<<m.cantC<<"): ";
 				     cin>>item;
-				     cout<<"Cantidad: ";
+				     cout<<"Cantidad a pedir: ";
 				     cin>>cantidad;
 				
 				    c.pedidos[c.cantPedidos].tipo="plato";
@@ -54,7 +54,7 @@ void realizarPedido(menu &m, cliente &c){
 				if(m.cantP>0){
 				     cout<<"Seleccione postre (1-"<<m.cantP<<"): ";
 				     cin>>item;
-				     cout<<"Cantidad: ";
+				     cout<<"Cantidad a pedir: ";
 				     cin>>cantidad;
 				
 				    c.pedidos[c.cantPedidos].tipo="postre";
@@ -66,19 +66,18 @@ void realizarPedido(menu &m, cliente &c){
 				system("pause");
 				break;
 					
-			case 4: //calcular el total
+			case 4: //calcular el total y finaliza el pedido 
 				for(int i=0;i<c.cantPedidos;i++){
 			            c.monto+=c.pedidos[i].precio*c.pedidos[i].cantidad;
-		        }
+		        }		        
+		        
 		    break;
-		            
-		    default:
-		       	cout<<"Opcion no valida"<<endl;
-				break;
 		}
 		
-	}while(opn!=4);
+	}while(opn!=4);	
+
 }
+
 
 void imprimeFactura(factura &f){
 	system("cls");
@@ -89,8 +88,17 @@ void imprimeFactura(factura &f){
 		cout<<"FECHA: "<<f.d<<"/"<<f.s<<"/"<<f.a<<endl;
 	       for(int i=0;i<f.cant;i++){           	           
               cout<<"Nombre del cliente: "<<f.mesas[i].nom<<endl;
-              cout<<"Mesa: "<<f.mesas[i].mesa<<endl;
-              cout<<"\n";        
+              cout<<"Mesa: "<<f.mesas[i].mesa<<endl;      
+			
+			  cout<<"\n---PEDIDOS---"<<endl;  //muestra el pedido
+              for(int j=0; j<f.mesas[i].cantPedidos; j++){
+                cout<<f.mesas[i].pedidos[j].cantidad<<" x "<<f.mesas[i].pedidos[j].nombre;
+                cout<<" (S/."<<f.mesas[i].pedidos[j].precio<<") = ";
+                cout<<"S/."<<f.mesas[i].pedidos[j].precio * f.mesas[i].pedidos[j].cantidad<<endl;
+              }
+              cout<<"TOTAL: S/."<<f.mesas[i].monto<<endl;
+              cout<<"\n";  
+              cout<<"----------------------------------------------------------------"<<endl;
            }		
 	}
 	else{
@@ -100,8 +108,16 @@ void imprimeFactura(factura &f){
                 cout<<"Nombre del cliente: "<<f.entregas[i].nomd<<endl;
                 cout<<"Direccion: "<<f.entregas[i].direct<<endl;
                 cout<<"Ingrese el DNI: "<<f.entregas[i].dni<<endl;
-                cout<<"Ingrese el telefono: "<<f.entregas[i].telefono<<endl;
-                cout<<"\n";			
+                cout<<"Ingrese el telefono: "<<f.entregas[i].telefono<<endl;	
+				
+			    cout<<"\n---PEDIDO---"<<endl;   //muestra el pedido
+                for(int j=0; j<f.mesas[i].cantPedidos; j++){
+                   cout<<f.mesas[i].pedidos[j].cantidad<<" x "<<f.mesas[i].pedidos[j].nombre;
+                   cout<<" (S/."<<f.mesas[i].pedidos[j].precio<<") = ";
+                   cout<<"S/."<<f.mesas[i].pedidos[j].precio * f.mesas[i].pedidos[j].cantidad<<endl;
+                }
+                cout<<"TOTAL: S/."<<f.mesas[i].monto<<endl;
+                cout<<"\n";		
 	        } 
          }
     }

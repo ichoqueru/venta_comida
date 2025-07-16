@@ -36,34 +36,77 @@ int main(){
         cout<<"---------------"<<endl<<"MENU DE OPCIONES"<<endl<<"---------------"<<endl;
         cout<<"1. Encargado"<<endl;
         cout<<"2. Cliente"<<endl;
-        cout<<"3. Imprimir boleta"<<endl;
-        cout<<"Eliga un usuario: "; cin>>op;
+        cout<<"0. Salir"<<endl;
+        cout<<"Elige un usuario: "; cin>>op;
         switch(op){
-            case 1:
-            system("cls");  //encargado
-            cout<<"---------------"<<endl<<"ENCARGADO"<<endl<<"---------------"<<endl;
-            cout<<"---MENU DEL DIA---"<<endl;
-            cout<<"1. Bebidas"<<endl;
-            cout<<"2. Plato de fondo"<<endl;
-            cout<<"3. Postres"<<endl;
-            cout<<"Eliga el tipo de comida: "; cin>>comida;
+            case 1:  //encargado
+            	do{
+            		system("cls");  
+                    cout<<"---------------"<<endl<<"ENCARGADO"<<endl<<"---------------"<<endl;
+                    cout<<"---MENU DEL DIA---"<<endl;
+                    cout<<"1. Bebidas"<<endl;
+                    cout<<"2. Plato de fondo"<<endl;
+                    cout<<"3. Postres"<<endl;
+                    cout<<"0. Volver al menu principal"<<endl;
+                    cout<<"Elija el tipo de comida: "; cin>>comida;
+                    cout<<endl<<"------------------------------------------------------------"<<endl;
             
-            switch(comida){
-                case 1:   //bebidas
-                registrarBebidas(m);
-                break;
+                    switch(comida){                    	
+                        case 1:   //bebidas
+                        
+                        system("cls");                        
+                        cout<<"---BEBIDAS---"<<endl;
+                        cout<<"Ingrese la cantidad de bebidas: "; cin>>m.cantB;
+                        cin.ignore();
+                        for(int i=0;i<m.cantB;i++){
+                            cout<<"Bebida "<<i+1<<": "; getline(cin,m.bebidas[i]);   //nombre de la bebida
+                    
+                            cout<<"Precio de "<<m.bebidas[i]<<": "; 
+					        cin>>m.preciosBebidas[i];
+					        cin.ignore();
+					        cout<<"\n";
+                        }
+                
+                        break;
 
-                case 2:    //plato de fondo
-                registrarPlatos(m);       
-                break;
+                        case 2:    //plato de fondo
+                        
+                           system("cls");
+                			cout<<"---PLATO DE FONDO---"<<endl;
+                			cout<<"Ingrese la cantidad de platillos: "; cin>>m.cantC;
+                			cin.ignore();
+                			for(int i=0;i<m.cantC;i++){
+                    		cout<<"Platillo "<<i+1<<": "; getline(cin,m.platos[i]);   //nombre del platillo
+                    
+                    		cout<<"Precio de "<<m.platos[i]<<": ";
+                    		cin>>m.preciosPlatos[i];
+                    		cin.ignore();
+                    		cout<<"\n";
+                			} 
+			             
+                		break;
 
-                case 3:  //postres
-                registrarPostres(m);
-                break;
+                		case 3:  //postres
+                		
+                            system("cls");
+                			cout<<"---POSTRES---"<<endl;
+                			cout<<"Ingrese la cantidad de postres: "; cin>>m.cantP;
+                			cin.ignore();
+                			for(int i=0;i<m.cantP;i++){
+                    			cout<<"Postre "<<i+1<<": "; getline(cin,m.postres[i]);   //nombre del postre
+                    
+                    			cout<<"Precio de "<<m.postres[i]<<": ";
+                    			cin>>m.preciosPostres[i];
+                    			cin.ignore();
+                    			cout<<"\n";                    
+                			}
+                
+                		break;
+            		
+            		}				            
 
-            }                        
-            system("pause");
-            break;
+                }while(comida!=0);
+				break;                     
 
             case 2:   //cliente        
             system("cls");
@@ -71,7 +114,7 @@ int main(){
             cout<<"---TIPO DE PEDIDO---"<<endl;
             cout<<"1) Delivery"<<endl;
             cout<<"2) Para la mesa"<<endl;
-            cout<<"Eliga el tipo de pedido: "; cin>>pedido;
+            cout<<"Elige el tipo de pedido: "; cin>>pedido;
             
             switch(pedido){
                 case 1:  //delivery
@@ -81,6 +124,7 @@ int main(){
                 cout<<"\n";
                 cout<<"FECHA: ";
                 cin>>f.d>>f.s>>f.a;
+                f.opc=2;
                 for(int i=0;i<f.cantdeli;i++){
                 cout<<"Datos del cliente "<<i+1<<"---"<<endl;                
                 cin.ignore();
@@ -92,6 +136,7 @@ int main(){
                 
                 realizarPedido(m,f.mesas[i]); //realizar el pedido
                 }
+                imprimeFactura(f);  //entrega la boleta
                 break;
 
                 case 2:    //para la mesa
@@ -101,6 +146,7 @@ int main(){
                 cout<<"\n";
                 cout<<"FECHA: ";
                 cin>>f.d>>f.s>>f.a;
+                f.opc=1;
                 for(int i=0;i<f.cant;i++){
                     cout<<"Datos del cliente "<<i+1<<"---"<<endl;
                     cin.ignore();                    
@@ -109,46 +155,16 @@ int main(){
                     cout<<"\n";
                     
                     realizarPedido(m,f.mesas[i]);   //realizar el pedido
+                    system("cls");
                 }   
+                imprimeFactura(f); //entrega la boleta
                 break;
             
         	}
         	system("pause");
         	break;
         	
-        	case 3:
-        		system("cls");
-        		cout<<"\n---Desea imprimir la boleta?---"<<endl;
-				cout<<"1. si"<<endl;
-				cout<<"2. no"<<endl;
-				cout<<"Eliga una opcion: "; cin>>eleccion;
-				switch(eleccion){
-					case 1:
-						system("cls");
-						cout<<"----------------"<<endl<<"BOLETA"<<endl<<"----------------"<<endl;
-						cout<<"1. Para la mesa"<<endl;
-						cout<<"2. Delivery"<<endl;
-						cout<<"Eliga el tipo de boleta: "; cin>>f.opc;
-						cout<<"\n";
-						imprimeFactura(f);
-						system("pause");
-						break;
-					
-					case 2:
-
-
-
-
-						break;
-						
-					default:
-						cout<<"Opcion no valida"<<endl;
-						system("pause");
-						break;
-				
-				}	 
-				system("pause");       
-        		break;
+ 
         }    
        
 
@@ -157,7 +173,6 @@ int main(){
 
     return 0;
 }
-
 
 
 
