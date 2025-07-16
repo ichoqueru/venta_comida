@@ -118,6 +118,7 @@ void imprimeFactura(factura &f){
                 }
                 cout<<"TOTAL: S/."<<f.mesas[i].monto<<endl;
                 cout<<"\n";		
+                cout<<"----------------------------------------------------------------"<<endl;
 	        } 
          }
     }
