@@ -1,32 +1,39 @@
 #include <iostream>
 #include <string>
-#include <vector>
 #include <cstdlib>
 using namespace std;
 
-struct ClienteMesa {          
-    string nom;
-    int    mesa;
-};
-
-struct DatosCliente {         
+// Datos cliente //
+struct DatosCliente {
     string nombre;
     string ubicacion;
     string alergias;
     string restriccion;
-    int    cumpleDia;
-    int    cumpleMes;
-    bool   esCumpleHoy = false;
+    int cumpleDia;
+    int cumpleMes;
+    bool esCumpleHoy = false;
+};
+
+// Datos básicos//
+struct ClienteMesa {
+    string nom;
+    int mesa;
 };
 
 
+string bebidas[20];
+string platos[20];
+string postres[20];
+int cantB = 0, cantP = 0, cantC = 0;
 
+DatosCliente baseClientes[100];
+int totalClientes = 0;
 
+// Prototipos //
 void cargarMenu();
-void registrarDatosCliente();             
+void registrarDatosCliente();
 void pedirPedido();
-bool cumpleañosHoy(const string& nombre, int d, int m); 
-
+bool cumpleañosHoy(const string& nombre, int d, int m);
 
 int main() {
     int op;
@@ -51,7 +58,6 @@ int main() {
     return 0;
 }
 
-
 void cargarMenu(){
     int tipo, cant; string nombre;
     system("cls");
@@ -63,19 +69,18 @@ void cargarMenu(){
     for(int i=1;i<=cant;i++){
         cout<<"Nombre "<<i<<": "; getline(cin, nombre);
         switch(tipo){
-        case 1: bebidas.push_back(nombre); break;
-        case 2: platos .push_back(nombre); break;
-        case 3: postres.push_back(nombre); break;
+        case 1: bebidas[cantB++] = nombre; break;
+        case 2: platos[cantP++] = nombre; break;
+        case 3: postres[cantC++] = nombre; break;
         }
     }
     system("pause");
 }
 
- //Registrar datos del cliente//
-void registrarDatosCliente(){                               
+void registrarDatosCliente(){
     system("cls");
     cout<<"--- REGISTRO DE DATOS DEL CLIENTE ---\n";
-    DatosCliente dc;
+    DatosCliente& dc = baseClientes[totalClientes];
     cin.ignore();
     cout<<"Nombre completo                 : "; getline(cin, dc.nombre);
     cout<<"Ubicacion preferida de la mesa   : "; getline(cin, dc.ubicacion);
@@ -83,12 +88,10 @@ void registrarDatosCliente(){
     cout<<"Restriccion dietetica           : "; getline(cin, dc.restriccion);
     cout<<"Dia de cumple (1-31)            : "; cin>>dc.cumpleDia;
     cout<<"Mes de cumple (1-12)            : "; cin>>dc.cumpleMes;
-    baseClientes.push_back(dc);
+    totalClientes++;
     cout<<"\n✔ Registro guardado.\n";
     system("pause");
 }
-
-
 
 void pedirPedido(){
     int tipo, nClientes;
@@ -102,9 +105,8 @@ void pedirPedido(){
         return;
     }
 
-   
     cout<<"Cantidad de clientes: "; cin>>nClientes;
-    int dia, mes;  // fecha simulada
+    int dia, mes;
     cout<<"Fecha de hoy (d m): "; cin>>dia>>mes;
 
     for(int i=0;i<nClientes;i++){
@@ -113,20 +115,19 @@ void pedirPedido(){
         cout<<"\nCliente "<<i+1<<" - Nombre : "; getline(cin, c.nom);
         cout<<"Número de mesa: "; cin>>c.mesa;
 
-        /* ¿Es su cumple? -> postre gratis */
-        if(cumpleañosHoy(c.nom, dia, mes)){             
-            cout<<"  ¡Feliz cumpleaños! Obtiene un postre gratis.\n";
+        if(cumpleañosHoy(c.nom, dia, mes)){
+            cout<<"🎂  ¡Feliz cumpleaños! Obtiene un postre gratis.\n";
         }
     }
     system("pause");
 }
 
-
-  //COMPRUEBA CUMPLEAÑOS//
-bool cumpleañosHoy(const string& nombre, int d, int m){   
-    for(auto& dc: baseClientes){
-        if(dc.nombre == nombre && dc.cumpleDia==d && dc.cumpleMes==m){
-            dc.esCumpleHoy = true;
+bool cumpleañosHoy(const string& nombre, int d, int m){
+    for(int i=0;i<totalClientes;i++){
+        if(baseClientes[i].nombre == nombre &&
+           baseClientes[i].cumpleDia == d &&
+           baseClientes[i].cumpleMes == m){
+            baseClientes[i].esCumpleHoy = true;
             return true;
         }
     }
