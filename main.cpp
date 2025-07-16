@@ -1,6 +1,7 @@
 #include<iostream>
 #include<string>
 #include<stdlib.h>
+#include"menu.h"
 using namespace std;
 
 struct pedido{
@@ -18,15 +19,7 @@ struct cliente{
     struct pedido pedidos[20];
 }mesas[200];
 
-struct menu{
-    string bebidas[10];
-    float preciosBebidas[10];
-	string platos[10];
-	float preciosPlatos[10];
-	string postres[10];
-	float preciosPostres[10];
-    int cantB,cantP,cantC;
-};
+
 
 struct info_delivery{
 	string direct,nomd;
@@ -40,9 +33,9 @@ struct factura{
 };
 
 
-void imprimeMenu(menu &);
+
 void imprimeFactura(factura &);
-void realizarPedido(menu &,cliente &);
+void realizarPedido(menu &, cliente &);
 
 int main(){
     int op,comida,pedido,eleccion;
@@ -223,31 +216,7 @@ int main(){
 }
 
 
-void imprimeMenu(menu &m){
-	cout<<"----------------"<<endl<<"Carta del dia"<<endl<<"----------------"<<endl;
-	
-	if(m.cantB>0){
-		cout<<"---BEBIDAS---"<<endl;
-    	for(int i=0;i<m.cantB;i++){
-    	   cout<<"Bebida "<<i+1<<": "<<m.bebidas[i]<<" - S/."<<m.preciosBebidas[i]<<endl;
-		}
-    }
-    
-    if(m.cantC>0){
-    	cout<<"\n---PLATO DE FONDO---"<<endl;
-        for(int i=0;i<m.cantC;i++){
-            cout<<"Platillo "<<i+1<<": "<<m.platos[i]<<" - S/."<<m.preciosPlatos[i]<<endl;
-        }          
-    }
-    
-    if(m.cantP>0){
-    	cout<<"\n---POSTRES---"<<endl;
-        for(int i=0;i<m.cantP;i++){
-            cout<<"Postres "<<i+1<<": "<<m.postres[i]<<" - S/."<<m.preciosPostres[i]<<endl;
-        }          
-    }
-        
-}
+
 
 void imprimeFactura(factura &f){
 	system("cls");
