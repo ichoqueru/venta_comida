@@ -15,5 +15,8 @@ struct menu{
 };
 
 void imprimeMenu(menu &);
+void registrarBebidas(menu &);
+void registrarPlatos(menu &);
+void registrarPostres(menu &);
 
 #endif

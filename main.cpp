@@ -2,40 +2,10 @@
 #include<string>
 #include<stdlib.h>
 #include"menu.h"
+#include"cliente.h"
 using namespace std;
 
-struct pedido{
-	string tipo;
-	string nombre;
-	float precio;
-	int cantidad;
-};
 
-struct cliente{
-    string nom;
-    int mesa;    
-    float monto;
-    int cantPedidos;
-    struct pedido pedidos[20];
-}mesas[200];
-
-
-
-struct info_delivery{
-	string direct,nomd;
-	int telefono,dni;
-}entregas[200];
-
-struct factura{
-	int d,s,a,opc,cantdeli,cant;
-	struct info_delivery entregas[200];
-	struct cliente mesas[200];
-};
-
-
-
-void imprimeFactura(factura &);
-void realizarPedido(menu &, cliente &);
 
 int main(){
     int op,comida,pedido,eleccion;
@@ -58,6 +28,8 @@ int main(){
 	string nombre;
 	float precio;
 	int cantidad;
+    struct cliente mesas[200];
+    struct info_delivery entregas[200];
 
     do{
         system("cls");  
@@ -78,48 +50,15 @@ int main(){
             
             switch(comida){
                 case 1:   //bebidas
-                system("cls");
-                cout<<"---BEBIDAS---"<<endl;
-                cout<<"Ingrese la cantidad de bebidas: "; cin>>m.cantB;
-                cin.ignore();
-                for(int i=0;i<m.cantB;i++){
-                    cout<<"Bebida "<<i+1<<": "; getline(cin,m.bebidas[i]);   //nombre de la bebida
-                    
-                    cout<<"Precio de "<<m.bebidas[i]<<": "; 
-					cin>>m.preciosBebidas[i];
-					cin.ignore();
-					cout<<"\n";
-                }
+                registrarBebidas(m);
                 break;
 
                 case 2:    //plato de fondo
-                system("cls");
-                cout<<"---PLATO DE FONDO---"<<endl;
-                cout<<"Ingrese la cantidad de platillos: "; cin>>m.cantC;
-                cin.ignore();
-                for(int i=0;i<m.cantC;i++){
-                    cout<<"Platillo "<<i+1<<": "; getline(cin,m.platos[i]);   //nombre del platillo
-                    
-                    cout<<"Precio de "<<m.platos[i]<<": ";
-                    cin>>m.preciosPlatos[i];
-                    cin.ignore();
-                    cout<<"\n";
-                }                
+                registrarPlatos(m);       
                 break;
 
                 case 3:  //postres
-                system("cls");
-                cout<<"---POSTRES---"<<endl;
-                cout<<"Ingrese la cantidad de postres: "; cin>>m.cantP;
-                cin.ignore();
-                for(int i=0;i<m.cantP;i++){
-                    cout<<"Postre "<<i+1<<": "; getline(cin,m.postres[i]);   //nombre del postre
-                    
-                    cout<<"Precio de "<<m.postres[i]<<": ";
-                    cin>>m.preciosPostres[i];
-                    cin.ignore();
-                    cout<<"\n";                    
-                }
+                registrarPostres(m);
                 break;
 
             }                        
@@ -196,6 +135,10 @@ int main(){
 						break;
 					
 					case 2:
+
+
+
+
 						break;
 						
 					default:
@@ -218,104 +161,5 @@ int main(){
 
 
 
-void imprimeFactura(factura &f){
-	system("cls");
-	cout<<"----------------"<<endl<<"BOLETA"<<endl<<"----------------"<<endl;
-	cout<<"\n";
-	
-	if(f.opc==1){
-		cout<<"FECHA: "<<f.d<<"/"<<f.s<<"/"<<f.a<<endl;
-	       for(int i=0;i<f.cant;i++){           	           
-              cout<<"Nombre del cliente: "<<f.mesas[i].nom<<endl;
-              cout<<"Mesa: "<<f.mesas[i].mesa<<endl;
-              cout<<"\n";        
-           }		
-	}
-	else{
-	     if(f.opc==2){
-         cout<<"FECHA: "<<f.d<<"/"<<f.s<<"/"<<f.a<<endl;
-            for(int i=0;i<f.cantdeli;i++){
-                cout<<"Nombre del cliente: "<<f.entregas[i].nomd<<endl;
-                cout<<"Direccion: "<<f.entregas[i].direct<<endl;
-                cout<<"Ingrese el DNI: "<<f.entregas[i].dni<<endl;
-                cout<<"Ingrese el telefono: "<<f.entregas[i].telefono<<endl;
-                cout<<"\n";			
-	        } 
-         }
-    }
-}
 
-void realizarPedido(menu &m, cliente &c){
-	int opn,cantidad,item;
-	do{
-		system("cls");
-		imprimeMenu(m);  //muetsra el menu al cliente
-		cout<<"\n-----------------------------------------------------------------"<<endl;
-		cout<<"1. Agregar bebida"<<endl;
-		cout<<"2. Agregar plato"<<endl;
-		cout<<"3. Agregar postre"<<endl;
-		cout<<"4. Finalizar pedido"<<endl;
-		cout<<"Seleccione opcion: "; cin>>opn;
-		
-		switch(opn){
-			case 1: //bebidas
-			    if(m.cantB>0){
-				     cout<<"Seleccione bebida (1-"<<m.cantB<<"): ";
-				     cin>>item;
-				     cout<<"Cantidad: ";
-				     cin>>cantidad;
-				
-				    c.pedidos[c.cantPedidos].tipo="bebida";
-				    c.pedidos[c.cantPedidos].nombre=m.bebidas[item-1];
-				    c.pedidos[c.cantPedidos].precio=m.preciosBebidas[item-1];
-				    c.pedidos[c.cantPedidos].cantidad=cantidad;
-				    c.cantPedidos++;
-			    }
-			system("pause");
-			break;
-			
-			case 2:    //platos
-				if(m.cantC>0){
-				     cout<<"Seleccione platillo (1-"<<m.cantC<<"): ";
-				     cin>>item;
-				     cout<<"Cantidad: ";
-				     cin>>cantidad;
-				
-				    c.pedidos[c.cantPedidos].tipo="plato";
-				    c.pedidos[c.cantPedidos].nombre=m.platos[item-1];
-				    c.pedidos[c.cantPedidos].precio=m.preciosPlatos[item-1];
-				    c.pedidos[c.cantPedidos].cantidad=cantidad;				    
-				    c.cantPedidos++;
-			    }
-				system("pause");
-				break;
-				
-			case 3:    //postres
-				if(m.cantP>0){
-				     cout<<"Seleccione postre (1-"<<m.cantP<<"): ";
-				     cin>>item;
-				     cout<<"Cantidad: ";
-				     cin>>cantidad;
-				
-				    c.pedidos[c.cantPedidos].tipo="postre";
-				    c.pedidos[c.cantPedidos].nombre=m.postres[item-1];
-				    c.pedidos[c.cantPedidos].precio=m.preciosPostres[item-1];
-				    c.pedidos[c.cantPedidos].cantidad=cantidad;
-				    c.cantPedidos++;
-			    }
-				system("pause");
-				break;
-					
-			case 4: //calcular el total
-				for(int i=0;i<c.cantPedidos;i++){
-			            c.monto+=c.pedidos[i].precio*c.pedidos[i].cantidad;
-		        }
-		    break;
-		            
-		    default:
-		       	cout<<"Opcion no valida"<<endl;
-				break;
-		}
-		
-	}while(opn!=4);
-}
+
